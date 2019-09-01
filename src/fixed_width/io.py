@@ -33,7 +33,7 @@ class FixedWidthFileReader:
 
     def __iter__(self):
         if self.spec.has_header:
-            self.open_file.__next__()
+            next(self.open_file)
         for line in self.open_file:
             data =  [
                 line[start:end].strip()
