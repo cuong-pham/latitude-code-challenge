@@ -47,5 +47,34 @@ class FixedWidthFileSpecTest(unittest.TestCase):
         self.assertEqual(spec.col_widths, [3,12,3] )
         self.assertEqual(spec.abs_offsets, [0,3,15,18])
 
+class FixedWidthFileReaderTest(unittest.TestCase):
+    def setUp(self):
+        import tempfile 
+        self.spec = FixedWidthFileSpec({
+            "ColumnNames":"f1, f2, f3",
+            "Offsets":"2,5,2",
+            "InputEncoding":"windows-1252",
+            "IncludeHeader":"False",
+            "OutputEncoding":"utf-8"
+        })
+        self.temp_input_file = tempfile.NamedTemporaryFile("w")
+        self.temp_input_file.write("123456789\n")
+        self.temp_input_file.write("abcdefghi")
+        self.temp_input_file.flush()
+        self.temp_input_file.seek(0)
+
+    def tearDown(self):
+        self.temp_input_file.close()
+
+    def test_iterate_and_parse(self):
+        with FixedWidthFileReader(self.temp_input_file.name, self.spec) as fwr:
+            i_fwr = iter(fwr)
+            digit_row = next(i_fwr)
+            alphabet_row = next(i_fwr)
+
+            self.assertEqual(digit_row, ["12","34567","89"])
+            self.assertEqual(alphabet_row,["ab","cdefg","hi"])
+        
+
 if __name__ == "__main__":
     unittest.main()
