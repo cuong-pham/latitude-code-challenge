@@ -34,6 +34,7 @@ class FixedWidthFileReader:
     def __iter__(self):
         if self.spec.has_header:
             next(self.open_file)
+            
         for line in self.open_file:
             data =  [
                 line[start:end].strip()
@@ -56,6 +57,9 @@ class FixedWidthFileWriter:
         self.open_file.close()
 
     def writerow(self, row: list) -> None:
+        if self.open_file is None: 
+            raise Exception("file is not open to write")
+        
         self.open_file.write(self.convert_to_fixed_width_line(row)+"\n")
 
     def convert_to_fixed_width_line(self, row: list) -> str:
