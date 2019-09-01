@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 from fixed_width.io import FixedWidthFileSpec, FixedWidthFileWriter, generate_fixed_width_file
 import sys

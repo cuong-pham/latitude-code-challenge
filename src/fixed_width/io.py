@@ -61,11 +61,11 @@ class FixedWidthFileWriter:
             _str = _str + string.rjust(width)[:width]        
         return _str
 
-def fixed_width_to_csv(input_file: str, output_file: str, spec: FixedWidthFileSpec) -> None:
+def fixed_width_to_csv(input_file: str, output_file: str, spec: FixedWidthFileSpec, delim=',') -> None:
     import csv
     with FixedWidthFileReader(input_file, spec) as fwr, \
         open(output_file, "w", encoding=spec.output_encoding) as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, delimiter=delim)
         if spec.has_header:
             writer.writerow(spec.cols)
 
