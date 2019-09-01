@@ -5,13 +5,16 @@ import itertools
 class FixedWidthFileSpec:
     config_keys = frozenset(["ColumnNames", "Offsets", "InputEncoding", "IncludeHeader", "OutputEncoding"])
     def __init__(self, spec: dict):
-        intersection = spec.keys() & self.config_keys
-        if len(intersection) != len(spec.keys()):
-            raise ValueError("Unrecognised keys {}".format(intersection))
+        if self.config_keys != spec.keys():
+            raise Exception("Spec must have all keys")
         
         self.col_widths = [int(o) for o in spec['Offsets'].split(',')]
         self.abs_offsets = [0] + list(itertools.accumulate(self.col_widths))
         self.cols = [col.strip() for col in spec['ColumnNames'].split(',')]
+        
+        if len(self.col_widths) != len(self.cols):
+            raise Exception("Number of offsets and number of columns must be the same")
+        
         self.has_header = spec['IncludeHeader'] == 'True'
         self.fixed_width_encoding = spec['InputEncoding']
         self.output_encoding = spec['OutputEncoding']
