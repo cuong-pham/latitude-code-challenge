@@ -20,7 +20,7 @@ docker run -it -v ~/temp-file/:/app/temp-file --rm lat-code-challenge:latest ./g
 3. Convert fixed-width file to csv according to spec:
 ~~~
 docker run -it -v ~/temp-file/:/app/temp-file --rm lat-code-challenge:latest ./fw-to-csv.py --input /app/temp-file/fwf.txt --output /app/temp-file/output.csv --spec /app/temp-file/spec.json
-~~
+~~~
 
 ## Run tests:
 ~~~
